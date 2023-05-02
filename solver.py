@@ -1,3 +1,8 @@
+import collections
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
 test_grid = [[5, 0, 0, 0, 8, 0, 0, 4, 9],
              [0, 0, 0, 5, 0, 0, 0, 3, 0],
              [0, 6, 7, 3, 0, 0, 0, 0, 1],
@@ -31,7 +36,39 @@ class SodukuBoard:
         board_string += '╚═══════╩═══════╩═══════╝'
         return board_string
 
+    def is_valid(self):
+        rows = collections.defaultdict(set)
+        cols = collections.defaultdict(set)
+        sqrs = collections.defaultdict(set)
+
+        for r in range(9):
+            for c in range(9):
+                val = self.grid[r][c]
+                if val == 0:
+                    continue
+                # check rows
+                if val in rows[r]:
+                    logging.debug(f'dupe {val} in row {r}')
+                    return False
+                else:
+                    rows[r].add(val)
+                # check cols
+                if val in cols[c]:
+                    logging.debug(f'dupe {val} in col {c}')
+                    return False
+                else:
+                    cols[c].add(val)
+                # check sqrs
+                key = (r // 3) * 3 + c // 3
+                if val in sqrs[key]:
+                    logging.debug(f'dupe {val} in sqr {key}')
+                    return False
+                else:
+                    sqrs[key].add(val)
+        return True
+
 
 if __name__ == '__main__':
     sb = SodukuBoard(test_grid)
     print(sb)
+    print(sb.is_valid())
