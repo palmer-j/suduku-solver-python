@@ -37,6 +37,12 @@ class SodukuBoard:
         return board_string
 
     def is_valid(self):
+        """
+        Check Sodoku grid is valid
+
+        Returns:
+            bool: return True if valid Sodoku
+        """
         rows = collections.defaultdict(set)
         cols = collections.defaultdict(set)
         sqrs = collections.defaultdict(set)
@@ -66,9 +72,49 @@ class SodukuBoard:
                 else:
                     sqrs[key].add(val)
         return True
+    
+    def is_possible(self, r, c, n):
+        """
+        Check if digit n can be inserted at position (r, c)
+
+        Args:
+            r (int): row of test digit
+            c (int): column of test digit
+            n (int): digit to test
+
+        Returns:
+            bool: return True if insertion is possible
+        """
+        if self.grid[r][c]:
+            print('already filled')
+            return False
+        # check columns
+        for i in range(9):
+            if self.grid[r][i] == n:
+                print('col fail')
+                return False
+        # check rows
+        for j in range(9):
+            if self.grid[j][c] == n:
+                print('row fail')
+                return False
+        # check squares
+        # find top-left of relevant square
+        i0 = r // 3
+        j0 = c // 3
+
+        print(f'{i0=},{j0=}')
+
+        for i in range(i0, i0 + 3):
+            for j in range(j0, j0 + 3):
+                if self.grid[i][j] == n:
+                    print('sqr fail')
+                    return False
+        return True
+
 
 
 if __name__ == '__main__':
     sb = SodukuBoard(test_grid)
     print(sb)
-    print(sb.is_valid())
+    print(sb.is_possible(1,4,2))
