@@ -36,6 +36,7 @@ class SodukuBoard:
         board_string += '╚═══════╩═══════╩═══════╝'
         return board_string
 
+    @property
     def is_valid(self):
         """
         Check Sodoku grid is valid
@@ -86,29 +87,22 @@ class SodukuBoard:
             bool: return True if insertion is possible
         """
         if self.grid[r][c]:
-            # print('already filled')
             return False
         # check columns
         for i in range(9):
             if self.grid[r][i] == n:
-                # print('col fail')
                 return False
         # check rows
         for j in range(9):
             if self.grid[j][c] == n:
-                # print('row fail')
                 return False
         # check squares
         # find top-left of relevant square
         i0 = (r // 3) * 3
         j0 = (c // 3) * 3
-
-        # print(f'{i0=},{j0=}')
-
         for i in range(i0, i0 + 3):
             for j in range(j0, j0 + 3):
                 if self.grid[i][j] == n:
-                    # print('sqr fail')
                     return False
         return True
 
@@ -139,5 +133,6 @@ if __name__ == '__main__':
     sb = SodukuBoard(test_grid)
 
     print(sb)
-    print(sb.solve())
+    sb.solve()
     print(sb)
+    print(sb.is_valid)
