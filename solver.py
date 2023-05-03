@@ -72,7 +72,7 @@ class SodukuBoard:
                 else:
                     sqrs[key].add(val)
         return True
-    
+
     def is_possible(self, r, c, n):
         """
         Check if digit n can be inserted at position (r, c)
@@ -86,35 +86,58 @@ class SodukuBoard:
             bool: return True if insertion is possible
         """
         if self.grid[r][c]:
-            print('already filled')
+            # print('already filled')
             return False
         # check columns
         for i in range(9):
             if self.grid[r][i] == n:
-                print('col fail')
+                # print('col fail')
                 return False
         # check rows
         for j in range(9):
             if self.grid[j][c] == n:
-                print('row fail')
+                # print('row fail')
                 return False
         # check squares
         # find top-left of relevant square
-        i0 = r // 3
-        j0 = c // 3
+        i0 = (r // 3) * 3
+        j0 = (c // 3) * 3
 
-        print(f'{i0=},{j0=}')
+        # print(f'{i0=},{j0=}')
 
         for i in range(i0, i0 + 3):
             for j in range(j0, j0 + 3):
                 if self.grid[i][j] == n:
-                    print('sqr fail')
+                    # print('sqr fail')
                     return False
         return True
 
+    def find_empty(self):
+        for i in range(9):
+            for j in range(9):
+                if self.grid[i][j] == 0:
+                    return (i, j)
+        return None
+
+    def solve(self):
+        next_empty = self.find_empty()
+        if not next_empty:
+            return True
+        else:
+            i, j = next_empty
+
+        for x in range(1, 10):
+            if self.is_possible(i, j, x):
+                self.grid[i][j] = x
+                if self.solve():
+                    return True
+                self.grid[i][j] = 0
+        return False
 
 
 if __name__ == '__main__':
     sb = SodukuBoard(test_grid)
+
     print(sb)
-    print(sb.is_possible(1,4,2))
+    print(sb.solve())
+    print(sb)
