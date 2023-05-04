@@ -129,9 +129,16 @@ class SodukuBoard:
         return False
 
 
-if __name__ == '__main__':
-    sb = SodukuBoard(test_grid)
+def read_from_string(string):
+    assert len(string) == 81
+    grid = [[int(i) if i.isdigit() else 0 for i in string[s*9:s*9+9]] for s in range(9)]
+    return SodukuBoard(grid)
 
+
+if __name__ == '__main__':
+    # sb = SodukuBoard(test_grid)
+
+    sb = read_from_string('98.7.....7.....6....6.5.....4...5.3...79..5......2...1..85..9......1...4.....3.2.')
     print(sb)
     sb.solve()
     print(sb)
